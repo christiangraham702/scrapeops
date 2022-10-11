@@ -7,6 +7,19 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
+SCRAPEOPS_API_KEY = 'eb1edd34-effd-4503-9034-e886417ca6fe'
+SCRAPEOPS_FAKE_USER_AGENT_ENABLED = True
+
+DOWNLOADER_MIDDLEWARES = {
+'scrapeops_scrapy.middleware.retry.RetryMiddleware': 550,
+'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
+'server_scraper.middlewares.ScrapeOpsFakeUserAgentMiddleware': 400,
+}
+
+EXTENSIONS = {
+'scrapeops_scrapy.extension.ScrapeOpsMonitor': 500, 
+}
+
 BOT_NAME = 'server_scraper'
 
 SPIDER_MODULES = ['server_scraper.spiders']

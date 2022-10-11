@@ -1,6 +1,8 @@
+
 import scrapy
 from server_scraper.items import ListCraigItem
-from server_scraper.stuff import good_links, headers, get_base_url
+from server_scraper.stuff import good_links, get_base_url
+from datetime import date
 
 
 class USScraperSpider(scrapy.Spider):
@@ -9,7 +11,8 @@ class USScraperSpider(scrapy.Spider):
     allowed_domains = ['craigslist.org']
     start_urls = ['http://craigslist.org/']
 
-    filename = 'server_test'
+    today = date.today()
+    filename = f'craigslist_raid_{today}'
 
     custom_settings = {
         'FEED_URI': f'data/{filename}.json',
@@ -18,13 +21,14 @@ class USScraperSpider(scrapy.Spider):
     }
 
     def parse(self, response):
+
         # good_links = [(link,zip)]
         for link in good_links:
             if link[1] == 'no zip code':
                 continue
             search = f'/search/sss?query=baby+formula&search_distance=250&postal={link[1]}'
             url = link[0]+search
-            yield scrapy.Request(url, callback=self.parse_page, headers=headers)
+            yield scrapy.Request(url, callback=self.parse_page)
 
     def parse_page(self, response):
         loot = ListCraigItem()
@@ -71,4 +75,4 @@ class USScraperSpider(scrapy.Spider):
                 next_page = response.xpath(
                     '//span[@class="buttons"]/a[@class="button next"]//@href').get()
                 base_url = get_base_url(response.url)
-                yield scrapy.Request(base_url+next_page, callback=self.parse_page, headers=headers)
+                yield scrapy.Request(base_url+next_page, callback=self.parse_page)
