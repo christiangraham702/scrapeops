@@ -2,8 +2,8 @@
 import scrapy
 from server_scraper.items import ListCraigItem
 from server_scraper.stuff import good_links, get_base_url
-from datetime import date
 from scrapy.loader import ItemLoader
+import datetime
 from itemloaders.processors import MapCompose, TakeFirst
 from server_scraper.funcs import get_base_url, get_num_listings, get_price, is_listings
 
