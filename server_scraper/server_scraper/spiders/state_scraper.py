@@ -1,21 +1,21 @@
-
 import scrapy
-from server_scraper.items import ListCraigItem
-from server_scraper.stuff import good_links, get_base_url
-from datetime import date
+from server_scraper.items import ListCraigStateItem
+from server_scraper.stuff import helpful_stuff, get_base_url
+import datetime
 from scrapy.loader import ItemLoader
 from itemloaders.processors import MapCompose, TakeFirst
 from server_scraper.funcs import get_base_url, get_num_listings, get_price, is_listings
 
-class USScraperSpider(scrapy.Spider):
-    name = 'US_scraper'
-
+class StateScraperSpider(scrapy.Spider):
+    name = 'state_scraper'
     allowed_domains = ['craigslist.org']
     start_urls = ['http://craigslist.org/']
-
     today = datetime.datetime.now()
-    filename = f'craigslist_state_raid_{today.strftime("%m-%d-%Y_%H:%M")}'
-
+    try:
+        filename = f'craigslist_{self.state}_raid_{today.strftime("%m-%d-%Y_%H:%M")}'
+    except:
+        filename = f'craigslist_state_raid_{today.strftime("%m-%d-%Y_%H:%M")}'
+    
     custom_settings = {
         'FEED_URI': f'data/{filename}.json',
         'FEED_FORMAT': 'json'
@@ -23,16 +23,10 @@ class USScraperSpider(scrapy.Spider):
     }
 
     def parse(self, response):
-
-        # good_links = [(link,zip)]
-        for link in good_links:
-            if link[1] == 'no zip code':
-                continue
-            search = f'/search/sss?query={self.search}&search_distance=250&postal={link[1]}'
-            url = link[0]+search
-            yield scrapy.Request(url, callback=self.parse_page)
-
-    def parse_page(self, response):
+        query = f'/search/sss?query={self.search}'
+        for link in helpful_stuff[self.state]:
+            yield scrapy.Request(link+query, callback = self.parse_listings)
+    def parse_listings(self, response):
         proc = TakeFirst()
         # checks for listings
         if is_listings(response):
@@ -43,7 +37,7 @@ class USScraperSpider(scrapy.Spider):
             counter = 0
             # iterating through each pid and getting info for each one
             for pid in response.xpath('//li[@class="result-row"]/@data-pid').getall():
-                l = ItemLoader(item=ListCraigItem(), response=response)
+                l = ItemLoader(item=ListCraigStateItem(), response=response)
                 # finds the number of items
                 l.add_xpath(
                     'num_items', '//span[@class="totalcount"]/text()', MapCompose(get_num_listings))
@@ -67,6 +61,7 @@ class USScraperSpider(scrapy.Spider):
                     l.add_xpath(
                         'price', f'//li[@data-pid="{pid}"]//span[@class="result-price"]/text()', MapCompose(get_price))
                     l.replace_value('price', proc(l.get_output_value('price')))
+                    l.add_value('state', self.state)
                     counter += 1
                     yield l.load_item()
             # checking if need to go to next page

@@ -15,3 +15,16 @@ class ListCraigItem(scrapy.Item):
     pid = scrapy.Field()
     zip_code = scrapy.Field()
     dist_from_zip = scrapy.Field()
+    num_items = scrapy.Field()
+
+class ListCraigStateItem(scrapy.Item):
+    title = scrapy.Field()
+    price = scrapy.Field()
+    date = scrapy.Field()
+    region = scrapy.Field()
+    link = scrapy.Field()
+    pid = scrapy.Field()
+    zip_code = scrapy.Field()
+    dist_from_zip = scrapy.Field()
+    num_items = scrapy.Field()
+    state = scrapy.Field()
