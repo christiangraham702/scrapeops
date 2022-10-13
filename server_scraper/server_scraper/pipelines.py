@@ -1,3 +1,4 @@
+
 # Define your item pipelines here
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
@@ -21,7 +22,7 @@ class PriceToFloatPipeLine:
         adapter = ItemAdapter(item)
 
         if adapter.get('price'):
-            floatPrice = float(adapter['price'])
+            floatPrice = float(adapter['price'][0])
             adapter['price'] = floatPrice
             return item
         else:
@@ -36,10 +37,10 @@ class DupePipeline:
     def process_item(self, item, spider):
         adapter = ItemAdapter(item)
 
-        if adapter['pid'] in self.names_seen:
+        if adapter['pid'][0] in self.names_seen:
             raise DropItem('Duplicate item found at ')
         else:
-            self.names_seen.add(adapter['name'])
+            self.names_seen.add(adapter['pid'][0])
             return item
 
 
@@ -53,6 +54,8 @@ class SaveToPostgresPipeline(object):
             user='doadmin',
             database='craigslist_loot',
             password='AVNS_i9jF4-8wV7KUn9TFYE_',
+            port='25060',
+            sslmode='require'
         )
         self.curr = self.connection.cursor()
 

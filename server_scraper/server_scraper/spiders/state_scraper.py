@@ -5,7 +5,7 @@ import datetime
 from scrapy.loader import ItemLoader
 from itemloaders.processors import MapCompose, TakeFirst
 from server_scraper.funcs import get_base_url, get_num_listings, get_price, is_listings
-
+import logging
 
 class StateScraperSpider(scrapy.Spider):
     name = 'state_scraper'
@@ -13,15 +13,16 @@ class StateScraperSpider(scrapy.Spider):
     start_urls = ['http://craigslist.org/']
     today = datetime.datetime.now()
 
-    filename = f'craigslist_state_raid_{today.strftime("%m-%d-%Y_%H:%M")}'
+#    filename = f'craigslist_state_raid_{today.strftime("%m-%d-%Y_%H:%M")}'
 
-    custom_settings = {
-        'FEED_URI': f'data/{filename}.json',
-        'FEED_FORMAT': 'json'
+#    custom_settings = {
+#        'FEED_URI': f'data/{filename}.json',
+#        'FEED_FORMAT': 'json'
         # 'LOG_FILE': f'data/{filename}.log'
-    }
+#    }
 
     def parse(self, response):
+        self.logger.info('Parse function called on %s', response.url)
         query = f'/search/sss?query={self.search}'
         for link in helpful_stuff[self.state]:
             yield scrapy.Request(link+query, callback=self.parse_listings)

@@ -16,11 +16,11 @@ class USScraperSpider(scrapy.Spider):
     today = datetime.datetime.now()
     filename = f'craigslist_state_raid_{today.strftime("%m-%d-%Y_%H:%M")}'
 
-    custom_settings = {
-        'FEED_URI': f'data/{filename}.json',
-        'FEED_FORMAT': 'json'
+#    custom_settings = {
+#       'FEED_URI': f'data/{filename}.json',
+#       'FEED_FORMAT': 'json'
         # 'LOG_FILE': f'data/{filename}.log'
-    }
+#   }
 
     def parse(self, response):
 
