@@ -6,16 +6,15 @@ from scrapy.loader import ItemLoader
 from itemloaders.processors import MapCompose, TakeFirst
 from server_scraper.funcs import get_base_url, get_num_listings, get_price, is_listings
 
+
 class StateScraperSpider(scrapy.Spider):
     name = 'state_scraper'
     allowed_domains = ['craigslist.org']
     start_urls = ['http://craigslist.org/']
     today = datetime.datetime.now()
-    try:
-        filename = f'craigslist_{self.state}_raid_{today.strftime("%m-%d-%Y_%H:%M")}'
-    except:
-        filename = f'craigslist_state_raid_{today.strftime("%m-%d-%Y_%H:%M")}'
-    
+
+    filename = f'craigslist_state_raid_{today.strftime("%m-%d-%Y_%H:%M")}'
+
     custom_settings = {
         'FEED_URI': f'data/{filename}.json',
         'FEED_FORMAT': 'json'
@@ -25,7 +24,8 @@ class StateScraperSpider(scrapy.Spider):
     def parse(self, response):
         query = f'/search/sss?query={self.search}'
         for link in helpful_stuff[self.state]:
-            yield scrapy.Request(link+query, callback = self.parse_listings)
+            yield scrapy.Request(link+query, callback=self.parse_listings)
+
     def parse_listings(self, response):
         proc = TakeFirst()
         # checks for listings

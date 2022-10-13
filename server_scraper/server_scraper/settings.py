@@ -11,13 +11,13 @@ SCRAPEOPS_API_KEY = 'eb1edd34-effd-4503-9034-e886417ca6fe'
 SCRAPEOPS_FAKE_USER_AGENT_ENABLED = True
 
 DOWNLOADER_MIDDLEWARES = {
-'scrapeops_scrapy.middleware.retry.RetryMiddleware': 550,
-'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
-'server_scraper.middlewares.ScrapeOpsFakeUserAgentMiddleware': 400,
+    'scrapeops_scrapy.middleware.retry.RetryMiddleware': 550,
+    'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
+    'server_scraper.middlewares.ScrapeOpsFakeUserAgentMiddleware': 400,
 }
 
 EXTENSIONS = {
-'scrapeops_scrapy.extension.ScrapeOpsMonitor': 500, 
+    'scrapeops_scrapy.extension.ScrapeOpsMonitor': 500,
 }
 
 BOT_NAME = 'server_scraper'
@@ -79,6 +79,8 @@ SPIDER_MIDDLEWARES = {
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     'server_scraper.pipelines.SaveToPostgresPipeline': 300,
+    'server_scraper.pipelines.DupePipline': 301,
+    'server_scraper.PriceToFloatPipeLine': 302
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
