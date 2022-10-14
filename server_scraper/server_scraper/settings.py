@@ -58,7 +58,7 @@ DOWNLOAD_DELAY = 3
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 SPIDER_MIDDLEWARES = {
-#    'server_scraper.middlewares.RotateUserAgentMiddleware': 535,
+    #    'server_scraper.middlewares.RotateUserAgentMiddleware': 535,
     'server_scraper.middlewares.ShowRequestHeadersMiddleware': 540,
     'server_scraper.middlewares.ServerScraperSpiderMiddleware': 543,
 }
@@ -78,9 +78,10 @@ SPIDER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'server_scraper.pipelines.SaveToPostgresPipeline': 303,
+    'server_scraper.pipelines.SaveToPostgresPipeline': 400,
     'server_scraper.pipelines.DupePipeline': 301,
-    'server_scraper.pipelines.PriceToFloatPipeLine': 302
+    'server_scraper.pipelines.PriceToFloatPipeLine': 302,
+    'server_scraper.pipelines.ListToDataPipeline': 303
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

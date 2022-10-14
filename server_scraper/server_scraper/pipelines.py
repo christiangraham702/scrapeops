@@ -16,6 +16,19 @@ class ServerScraperPipeline:
         return item
 
 
+class ListToDataPipeline:
+
+    def process_item(self, item, spider):
+        adapter = ItemAdapter(item)
+        adapter['date'] = adapter['date'][0]
+        adapter['link'] = adapter['link'][0]
+        adapter['num_items'] = adapter['num_items'][0]
+        adapter['region'] = adapter['region'][0]
+        # adapter['state'] = adapter['state'][0]
+        adapter['title'] = adapter['title'][0]
+        return item
+
+
 class PriceToFloatPipeLine:
 
     def process_item(self, item, spider):
@@ -65,15 +78,16 @@ class SaveToPostgresPipeline(object):
 
     def store_db(self, item):
         try:
-            self.curr.execute(""" INSERT INTO test_table (num_items, zip_code, pid, link, title, date, dist_from_zip, price) values (%s, %s, %s, %s, %s, %s, %s, %s)""", (
-                item['num_items'],
-                item['zip_code'],
+            self.curr.execute(""" INSERT INTO loot_test (pid, title, price, date, region, link, zip_code, dist_from_zip, num_items) values (%f, %s, %f, %s, %s, %s, %s, %s)""", (
                 item['pid'],
-                item['link'],
                 item['title'],
+                item['price'],
                 item['date'],
+                item['region'],
+                item['link'],
+                item['zip_code'],
                 item['dist_from_zip'],
-                item['price']
+                item['num_items']
             ))
         except BaseException as e:
             print(e)
