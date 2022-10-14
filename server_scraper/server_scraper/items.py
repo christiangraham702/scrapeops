@@ -9,42 +9,42 @@ from itemloaders.processors import MapCompose, TakeFirst
 
 class ListCraigItem(scrapy.Item):
     title = scrapy.Field(
-        output_processor=MapCompose(lambda x: x[0])
+        output_processor=TakeFirst()
     )
     price = scrapy.Field(
-        output_processor=MapCompose(lambda x: x[0])
+        output_processor=TakeFirst()
     )
     date = scrapy.Field(
-        output_processor=MapCompose(lambda x: x[0])
+        output_processor=TakeFirst()
     )
     region = scrapy.Field(
-        output_processor=MapCompose(lambda x: x[0])
+        output_processor=TakeFirst()
     )
     link = scrapy.Field(
-        output_processor=MapCompose(lambda x: x[0])
+        output_processor=TakeFirst()
     )
     pid = scrapy.Field(
-        output_processor=MapCompose(lambda x: x[0])
+        output_processor=TakeFirst()
     )
     zip_code = scrapy.Field(
-        output_processor=MapCompose(lambda x: x[0])
+        output_processor=TakeFirst()
     )
     dist_from_zip = scrapy.Field(
-        output_processor=MapCompose(lambda x: x[0])
+        output_processor=TakeFirst()
     )
     num_items = scrapy.Field(
-        output_processor=MapCompose(lambda x: x[0])
+        output_processor=TakeFirst()
     )
 
 
 class ListCraigStateItem(scrapy.Item):
-    title = scrapy.Field(output_processor=MapCompose(lambda x: x[0]))
-    price = scrapy.Field(output_processor=MapCompose(lambda x: x[0]))
-    date = scrapy.Field(output_processor=MapCompose(lambda x: x[0]))
-    region = scrapy.Field(output_processor=MapCompose(lambda x: x[0]))
-    link = scrapy.Field(output_processor=MapCompose(lambda x: x[0]))
-    pid = scrapy.Field(output_processor=MapCompose(lambda x: x[0]))
-    zip_code = scrapy.Field(output_processor=MapCompose(lambda x: x[0]))
-    dist_from_zip = scrapy.Field(output_processor=MapCompose(lambda x: x[0]))
-    num_items = scrapy.Field(output_processor=MapCompose(lambda x: x[0]))
-    state = scrapy.Field(output_processor=MapCompose(lambda x: x[0]))
+    title = scrapy.Field(output_processor=TakeFirst())
+    price = scrapy.Field(output_processor=TakeFirst())
+    date = scrapy.Field(output_processor=TakeFirst())
+    region = scrapy.Field(output_processor=TakeFirst())
+    link = scrapy.Field(output_processor=TakeFirst())
+    pid = scrapy.Field(output_processor=TakeFirst())
+    zip_code = scrapy.Field(output_processor=TakeFirst())
+    dist_from_zip = scrapy.Field(output_processor=TakeFirst())
+    num_items = scrapy.Field(output_processor=TakeFirst())
+    state = scrapy.Field(output_processor=TakeFirst())
