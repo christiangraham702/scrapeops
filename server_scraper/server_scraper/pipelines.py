@@ -64,8 +64,9 @@ class SaveToPostgresPipeline(object):
         return item
 
     def store_db(self, item):
+        adapter = ItemAdapter(item)
         try:
-            insert_script = '''INSERT INTO craigs_loot(pid, title, price, date, region, link, zip_code, dist_from_zip, num_items)
+            insert_script = '''INSERT INTO craigs_loot (pid, title, price, date, region, link, zip_code, dist_from_zip, num_items)
                                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s) 
             '''
             create_script = ''' CREATE TABLE IF NOT EXISTS craigs_loot (
@@ -80,18 +81,18 @@ class SaveToPostgresPipeline(object):
                             num_items       varchar(10)) '''
 
             insert_value = (
-                item['pid'],
-                item['title'],
-                item['price'],
-                item['date'],
-                item['region'],
-                item['link'],
-                item['zip_code'],
-                item['dist_from_zip'],
-                item['num_items']
+                adapter['pid'],
+                adapter['title'],
+                adapter['price'],
+                adapter['date'],
+                adapter['region'],
+                adapter['link'],
+                adapter['zip_code'],
+                adapter['dist_from_zip'],
+                adapter['num_items']
             )
 
-            self.curr.execute(create_script)
+            # self.curr.execute(create_script)
             self.curr.execute(insert_script, insert_value)
             self.conn.commit()
 
