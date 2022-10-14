@@ -16,26 +16,13 @@ class ServerScraperPipeline:
         return item
 
 
-class ListToDataPipeline:
-
-    def process_item(self, item, spider):
-        adapter = ItemAdapter(item)
-        adapter['date'] = adapter['date'][0]
-        adapter['link'] = adapter['link'][0]
-        adapter['num_items'] = adapter['num_items'][0]
-        adapter['region'] = adapter['region'][0]
-        # adapter['state'] = adapter['state'][0]
-        adapter['title'] = adapter['title'][0]
-        return item
-
-
 class PriceToFloatPipeLine:
 
     def process_item(self, item, spider):
         adapter = ItemAdapter(item)
 
         if adapter.get('price'):
-            floatPrice = float(adapter['price'][0])
+            floatPrice = float(adapter['price'])
             adapter['price'] = floatPrice
             return item
         else:
@@ -50,10 +37,10 @@ class DupePipeline:
     def process_item(self, item, spider):
         adapter = ItemAdapter(item)
 
-        if adapter['pid'][0] in self.names_seen:
+        if adapter['pid'] in self.names_seen:
             raise DropItem('Duplicate item found at ')
         else:
-            self.names_seen.add(adapter['pid'][0])
+            self.names_seen.add(adapter['pid'])
             return item
 
 

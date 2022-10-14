@@ -80,8 +80,7 @@ SPIDER_MIDDLEWARES = {
 ITEM_PIPELINES = {
     'server_scraper.pipelines.SaveToPostgresPipeline': 400,
     'server_scraper.pipelines.DupePipeline': 301,
-    'server_scraper.pipelines.PriceToFloatPipeLine': 302,
-    'server_scraper.pipelines.ListToDataPipeline': 303
+    'server_scraper.pipelines.PriceToFloatPipeLine': 302
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
