@@ -22,7 +22,7 @@ class PriceToFloatPipeLine:
         adapter = ItemAdapter(item)
 
         if adapter.get('price'):
-            floatPrice = float(adapter['price'])
+            floatPrice = int(adapter['price'])
             adapter['price'] = floatPrice
             return item
         else:
@@ -49,15 +49,14 @@ class SaveToPostgresPipeline(object):
         self.create_connection()
 
     def create_connection(self):
-        self.connection = psycopg2.connect(
+        self.conn = psycopg2.connect(
             host='db-postgresql-scrapy123-do-user-12631638-0.b.db.ondigitalocean.com',
             user='doadmin',
-            database='craigslist_loot',
+            dbname='craigslist_loot',
             password='AVNS_i9jF4-8wV7KUn9TFYE_',
-            port='25060',
-            sslmode='require'
+            port='25060'
         )
-        self.curr = self.connection.cursor()
+        self.curr = self.conn.cursor()
 
     def process_item(self, item, spider):
         self.store_db(item)
@@ -65,7 +64,21 @@ class SaveToPostgresPipeline(object):
 
     def store_db(self, item):
         try:
-            self.curr.execute(""" INSERT INTO loot_test (pid, title, price, date, region, link, zip_code, dist_from_zip, num_items) values (%f, %s, %f, %s, %s, %s, %s, %s)""", (
+            insert_script = '''INSERT INTO craigs_loot(pid, title, price, date, region, link, zip_code, dist_from_zip, num_items)
+                               VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s) 
+            '''
+            create_script = ''' CREATE TABLE IF NOT EXISTS craigs_loot (
+                            pid             int PRIMARY KEY,
+                            title           varchar(140) NOT NULL,
+                            price           int,
+                            date            varchar(30),
+                            region          varchar(30),
+                            link            varchar(150),
+                            zip_code        varchar(15),
+                            dist_from_zip   varchar(20),
+                            num_items       varchar(10)) '''
+
+            insert_value = (
                 item['pid'],
                 item['title'],
                 item['price'],
@@ -75,7 +88,14 @@ class SaveToPostgresPipeline(object):
                 item['zip_code'],
                 item['dist_from_zip'],
                 item['num_items']
-            ))
-        except BaseException as e:
+            )
+
+            self.curr.execute(create_script)
+            self.curr.execute(insert_script, insert_value)
+            self.conn.commit()
+
+        except Exception as e:
             print(e)
-        self.connection.commit()
+        finally:
+            self.curr.close()
+            self.conn.close()
