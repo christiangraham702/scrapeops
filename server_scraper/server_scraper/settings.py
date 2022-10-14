@@ -6,8 +6,9 @@
 #     https://docs.scrapy.org/en/latest/topics/settings.html
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+from server_scraper.secret.info import scrape_API_KEY
 
-SCRAPEOPS_API_KEY = 'eb1edd34-effd-4503-9034-e886417ca6fe'
+SCRAPEOPS_API_KEY = scrape_API_KEY
 SCRAPEOPS_FAKE_USER_AGENT_ENABLED = True
 
 DOWNLOADER_MIDDLEWARES = {

@@ -9,6 +9,7 @@
 from itemadapter import ItemAdapter
 from scrapy.exceptions import DropItem
 import psycopg2
+from server_scraper.secret.info import *
 
 
 class ServerScraperPipeline:
@@ -50,11 +51,11 @@ class SaveToPostgresPipeline(object):
 
     def create_connection(self):
         self.conn = psycopg2.connect(
-            host='db-postgresql-scrapy123-do-user-12631638-0.b.db.ondigitalocean.com',
-            user='doadmin',
-            dbname='craigslist_loot',
-            password='AVNS_i9jF4-8wV7KUn9TFYE_',
-            port='25060'
+            host=hostname,
+            user=username,
+            dbname=database,
+            password=pwd,
+            port=purt
         )
         self.curr = self.conn.cursor()
 
