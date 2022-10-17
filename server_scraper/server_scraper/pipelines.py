@@ -49,7 +49,7 @@ class SaveToPostgresPipeline(object):
     def __init__(self):
         self.create_connection()
 
-    def create_connection(self):
+    def open_spider(self, spider):
         self.conn = psycopg2.connect(
             host=hostname,
             user=username,
@@ -62,6 +62,10 @@ class SaveToPostgresPipeline(object):
     def process_item(self, item, spider):
         self.store_db(item)
         return item
+
+    def close_spider(self, spider):
+        self.curr.close()
+        self.conn.close()
 
     def store_db(self, item):
         adapter = ItemAdapter(item)
@@ -98,6 +102,3 @@ class SaveToPostgresPipeline(object):
 
         except Exception as e:
             print(e)
-        finally:
-            self.curr.close()
-            self.conn.close()
