@@ -46,8 +46,8 @@ class DupePipeline:
 
 
 class SaveToPostgresPipeline(object):
-    def __init__(self):
-        self.create_connection()
+    # def __init__(self):
+    #     self.create_connection()
 
     def open_spider(self, spider):
         self.conn = psycopg2.connect(
