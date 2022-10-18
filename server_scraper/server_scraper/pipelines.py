@@ -45,6 +45,26 @@ class DupePipeline:
             return item
 
 
+class CheckNonePipeline:
+    def process_item(self, item, spider):
+        adapter = ItemAdapter(item)
+        if not adapter.get('title'):
+            adapter['title'] = 'None'
+        if not adapter.get('date'):
+            adapter['date'] = 'None'
+        if not adapter.get('region'):
+            adapter['region'] = 'None'
+        if not adapter.get('link'):
+            adapter['link'] = 'None'
+        if not adapter.get('zip_code'):
+            adapter['zip_code'] = 'None'
+        if not adapter.get('dist_from_zip'):
+            adapter['dist_from_zip'] = 'None'
+        if not adapter.get('num_items'):
+            adapter['num_items'] = 'None'
+        return item
+
+
 class SaveToPostgresPipeline(object):
     # def __init__(self):
     #     self.create_connection()
@@ -69,6 +89,7 @@ class SaveToPostgresPipeline(object):
 
     def store_db(self, item):
         adapter = ItemAdapter(item)
+
         try:
             insert_script = '''INSERT INTO craigs_loot (pid, title, price, date, region, link, zip_code, dist_from_zip, num_items)
                                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s) 
