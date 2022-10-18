@@ -71,7 +71,7 @@ class SaveToPostgresPipeline(object):
     def __init__(self):
         self.create_connection()
 
-    def create_connection(self, spider):
+    def create_connection(self):
         self.conn = psycopg2.connect(
             host=hostname,
             user=username,
