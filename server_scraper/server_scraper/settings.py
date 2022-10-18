@@ -80,9 +80,9 @@ SPIDER_MIDDLEWARES = {
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     'server_scraper.pipelines.SaveToPostgresPipeline': 400,
-    'server_scraper.pipelines.DupePipeline': 301,
+    'server_scraper.pipelines.DupePipeline': 201,
     'server_scraper.pipelines.PriceToFloatPipeLine': 302,
-    'server_scraper.pipelines.CheckNonePipeline': 200
+    'server_scraper.pipelines.CheckNonePipeline': 250
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
