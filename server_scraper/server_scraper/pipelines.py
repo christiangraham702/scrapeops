@@ -68,10 +68,10 @@ class CheckNonePipeline:
 
 
 class SaveToPostgresPipeline(object):
-    # def __init__(self):
-    #     self.create_connection()
+    def __init__(self):
+        self.create_connection()
 
-    def open_spider(self, spider):
+    def create_connection(self, spider):
         self.conn = psycopg2.connect(
             host=hostname,
             user=username,
@@ -85,18 +85,14 @@ class SaveToPostgresPipeline(object):
         self.store_db(item)
         return item
 
-    def close_spider(self, spider):
-        self.curr.close()
-        self.conn.close()
-
     def store_db(self, item):
         adapter = ItemAdapter(item)
 
         try:
-            insert_script = '''INSERT INTO craigs_loot (pid, title, price, date, region, link, zip_code, dist_from_zip, num_items)
-                               VALUES (%f,%s,%i,%s,%s,%s,%s,%s,%s) 
+            insert_script = '''insert into craigs_loot (pid, title, price, date, region, link, zip_code, dist_from_zip, num_items)
+                               values (%f,%s,%i,%s,%s,%s,%s,%s,%s) 
             '''
-            create_script = ''' CREATE TABLE IF NOT EXISTS craigs_loot (
+            create_script = ''' CREATE TABLE IF NOT EXISTS craig_test2 (
                             pid             int PRIMARY KEY,
                             title           varchar(140) NOT NULL,
                             price           int,
@@ -120,8 +116,13 @@ class SaveToPostgresPipeline(object):
             )
 
             # self.curr.execute(create_script)
+            self.curr.execute(create_script)
             self.curr.execute(insert_script, insert_value)
             self.conn.commit()
 
-        except Exception as e:
+        except BaseException as e:
             print(e)
+        finally:
+            if self.conn:
+                self.curr.close()
+                self.conn.close()
