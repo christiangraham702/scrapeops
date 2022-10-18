@@ -116,13 +116,13 @@ class SaveToPostgresPipeline(object):
             )
 
             # self.curr.execute(create_script)
-            self.curr.execute(create_script)
+            # self.curr.execute(create_script)
             self.curr.execute(insert_script, insert_value)
             self.conn.commit()
 
         except BaseException as e:
             print(e)
-        finally:
-            if self.conn:
-                self.curr.close()
-                self.conn.close()
+        # finally:
+        #     if self.conn:
+        #         # self.curr.close()
+        #         # self.conn.close()
