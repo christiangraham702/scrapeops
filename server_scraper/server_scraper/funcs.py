@@ -19,7 +19,7 @@ def get_price(x):
     if x:
         return x.replace('$', '')
     else:
-        return None
+        return 0
 
 
 def is_listings(response):

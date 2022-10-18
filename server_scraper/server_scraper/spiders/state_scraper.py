@@ -29,7 +29,6 @@ class StateScraperSpider(scrapy.Spider):
             yield scrapy.Request(link+query, callback=self.parse_listings)
 
     def parse_listings(self, response):
-        proc = TakeFirst()
         # checks for listings
         if is_listings(response):
             # pages to parse

@@ -24,8 +24,8 @@ class PriceToFloatPipeLine:
         adapter = ItemAdapter(item)
 
         if adapter.get('price'):
-            floatPrice = get_price(adapter['price'])
-            floatPrice = int(adapter['price'])
+            tmp = get_price(adapter['price'])
+            floatPrice = int(tmp)
             adapter['price'] = floatPrice
             return item
         else:
