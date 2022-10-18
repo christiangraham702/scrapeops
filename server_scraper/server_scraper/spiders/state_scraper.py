@@ -62,7 +62,7 @@ class StateScraperSpider(scrapy.Spider):
                         'dist_from_zip', f'//li[@data-pid="{pid}"]//span[@class="maptag"]/text()')
                     l.add_xpath(
                         'price', f'//li[@data-pid="{pid}"]//span[@class="result-price"]/text()')
-                    l.replace_value('price', proc(l.get_output_value('price')))
+#                    l.replace_value('price', proc(l.get_output_value('price')))
                     l.add_value('state', self.state)
                     counter += 1
                     yield l.load_item()
