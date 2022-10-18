@@ -10,6 +10,7 @@ from itemadapter import ItemAdapter
 from scrapy.exceptions import DropItem
 import psycopg2
 from server_scraper.secret.info import *
+from server_scraper.funcs import get_price
 
 
 class ServerScraperPipeline:
@@ -23,11 +24,12 @@ class PriceToFloatPipeLine:
         adapter = ItemAdapter(item)
 
         if adapter.get('price'):
+            floatPrice = get_price(adapter['price'])
             floatPrice = int(adapter['price'])
             adapter['price'] = floatPrice
             return item
         else:
-            adapter['price'] = 0.0
+            adapter['price'] = 0
             return item
 
 

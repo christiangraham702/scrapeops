@@ -7,6 +7,7 @@ from itemloaders.processors import MapCompose, TakeFirst
 from server_scraper.funcs import get_base_url, get_num_listings, get_price, is_listings
 import logging
 
+
 class StateScraperSpider(scrapy.Spider):
     name = 'state_scraper'
     allowed_domains = ['craigslist.org']
@@ -18,7 +19,7 @@ class StateScraperSpider(scrapy.Spider):
 #    custom_settings = {
 #        'FEED_URI': f'data/{filename}.json',
 #        'FEED_FORMAT': 'json'
-        # 'LOG_FILE': f'data/{filename}.log'
+    # 'LOG_FILE': f'data/{filename}.log'
 #    }
 
     def parse(self, response):
@@ -48,11 +49,11 @@ class StateScraperSpider(scrapy.Spider):
                 num_items = int(num_items[0])
                 if counter <= num_items:
                     l.add_xpath(
-                        'zip_code', '//div[@class="searchgroup"]/input[@name="postal"]/@value', TakeFirst())
+                        'zip_code', '//div[@class="searchgroup"]/input[@name="postal"]/@value')
                     l.add_value('pid', float(pid))
                     l.add_value('link', response.url)
                     l.add_xpath(
-                        'title', f'//li[@data-pid="{pid}"]//h3[@class="result-heading"]/a/text()', TakeFirst())
+                        'title', f'//li[@data-pid="{pid}"]//h3[@class="result-heading"]/a/text()')
                     l.add_xpath(
                         'date', f'//li[@data-pid="{pid}"]//time/@datetime')
                     l.add_xpath(
@@ -60,7 +61,7 @@ class StateScraperSpider(scrapy.Spider):
                     l.add_xpath(
                         'dist_from_zip', f'//li[@data-pid="{pid}"]//span[@class="maptag"]/text()')
                     l.add_xpath(
-                        'price', f'//li[@data-pid="{pid}"]//span[@class="result-price"]/text()', MapCompose(get_price))
+                        'price', f'//li[@data-pid="{pid}"]//span[@class="result-price"]/text()')
                     l.replace_value('price', proc(l.get_output_value('price')))
                     l.add_value('state', self.state)
                     counter += 1
