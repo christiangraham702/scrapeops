@@ -17,7 +17,7 @@ def get_num_listings(x):
 
 def get_price(x):
     if x:
-        return x.replace('$', '')
+        return x.replace('$', '').replace(',', '')
     else:
         return 0
 

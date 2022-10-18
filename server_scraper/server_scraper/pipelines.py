@@ -94,7 +94,7 @@ class SaveToPostgresPipeline(object):
 
         try:
             insert_script = '''INSERT INTO craigs_loot (pid, title, price, date, region, link, zip_code, dist_from_zip, num_items)
-                               VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s) 
+                               VALUES (%f,%s,%i,%s,%s,%s,%s,%s,%s) 
             '''
             create_script = ''' CREATE TABLE IF NOT EXISTS craigs_loot (
                             pid             int PRIMARY KEY,
