@@ -55,7 +55,7 @@ class USScraperSpider(scrapy.Spider):
                 if counter <= num_items:
                     l.add_xpath(
                         'zip_code', '//div[@class="searchgroup"]/input[@name="postal"]/@value')
-                    l.add_value('pid', float(pid))
+                    l.add_value('pid', int(pid))
                     l.add_value('link', response.url)
                     l.add_xpath(
                         'title', f'//li[@data-pid="{pid}"]//h3[@class="result-heading"]/a/text()')
