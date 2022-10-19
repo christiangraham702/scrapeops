@@ -24,8 +24,8 @@ class StateScraperSpider(scrapy.Spider):
 
     def parse(self, response):
         self.logger.info('Parse function called on %s', response.url)
-        query = f'/search/sss?query=baby+formula'
-        for link in helpful_stuff['Florida']:
+        query = f'/search/sss?query={self.search}'
+        for link in helpful_stuff[self.state]:
             yield scrapy.Request(link+query, callback=self.parse_listings)
 
     def parse_listings(self, response):

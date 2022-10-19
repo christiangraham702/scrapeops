@@ -82,13 +82,15 @@ class SaveToPostgresPipeline(object):
         self.curr = self.conn.cursor()
 
     def process_item(self, item, spider):
-        self.store_db(item)
+        try:
+            self.store_db(item)
+        except:
+            self.conn.rollback()
         return item
 
     def store_db(self, item):
         #     insert_stat = “INSERT INTO measurement(Station, Date, Level, MeanDischarge, Discharge)
         #     VALUES (?, ?, ?, ?, ?)”, (value1, value2, value3, value4, value5)
-        adapter = ItemAdapter(item)
 
         insert_script = '''INSERT INTO craigs_loot (pid, title, price, date, region, link, zip_code, dist_from_zip, num_items)
                            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s) '''
@@ -103,21 +105,22 @@ class SaveToPostgresPipeline(object):
                         dist_from_zip   varchar(20),
                         num_items       varchar(10)) '''
         insert_value = (
-            adapter['pid'],
-            adapter['title'],
-            adapter['price'],
-            adapter['date'],
-            adapter['region'],
-            adapter['link'],
-            adapter['zip_code'],
-            adapter['dist_from_zip'],
-            adapter['num_items']
+            item['pid'],
+            item['title'],
+            item['price'],
+            item['date'],
+            item['region'],
+            item['link'],
+            item['zip_code'],
+            item['dist_from_zip'],
+            item['num_items']
         )
         # self.curr.execute(create_script)
         # self.curr.execute(create_script)
         print(insert_value)
         self.curr.execute(insert_script, insert_value)
         self.conn.commit()
+        return item
 
         # finally:
         #     if self.conn:
