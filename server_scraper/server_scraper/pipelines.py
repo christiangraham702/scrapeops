@@ -96,7 +96,7 @@ class SaveToPostgresPipeline(object):
         #     insert_stat = “INSERT INTO measurement(Station, Date, Level, MeanDischarge, Discharge)
         #     VALUES (?, ?, ?, ?, ?)”, (value1, value2, value3, value4, value5)
 
-        insert_script = '''INSERT INTO craigs_loot (pid, title, price, date, region, link, zip_code, dist_from_zip, num_items)
+        insert_script = '''INSERT INTO craigs_looter (pid, title, price, date, region, link, zip_code, dist_from_zip, num_items)
                            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s) '''
         create_script = ''' CREATE TABLE IF NOT EXISTS craig_test2 (
                         pid             BIGINT PRIMARY KEY,
