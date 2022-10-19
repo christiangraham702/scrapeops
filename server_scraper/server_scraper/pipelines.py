@@ -86,10 +86,12 @@ class SaveToPostgresPipeline(object):
         return item
 
     def store_db(self, item):
+        #     insert_stat = “INSERT INTO measurement(Station, Date, Level, MeanDischarge, Discharge)
+        #     VALUES (?, ?, ?, ?, ?)”, (value1, value2, value3, value4, value5)
         adapter = ItemAdapter(item)
 
-        insert_script = '''insert into craigs_loot (pid, title, price, date, region, link, zip_code, dist_from_zip, num_items)
-                           values (%f,%s,%i,%s,%s,%s,%s,%s,%s) '''
+        insert_script = '''INSERT INTO craigs_loot (pid, title, price, date, region, link, zip_code, dist_from_zip, num_items)
+                           VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s) '''
         create_script = ''' CREATE TABLE IF NOT EXISTS craig_test2 (
                         pid             int PRIMARY KEY,
                         title           varchar(140) NOT NULL,
