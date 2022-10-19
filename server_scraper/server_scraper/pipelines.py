@@ -88,40 +88,35 @@ class SaveToPostgresPipeline(object):
     def store_db(self, item):
         adapter = ItemAdapter(item)
 
-        try:
-            insert_script = '''insert into craigs_loot (pid, title, price, date, region, link, zip_code, dist_from_zip, num_items)
-                               values (%f,%s,%i,%s,%s,%s,%s,%s,%s) 
-            '''
-            create_script = ''' CREATE TABLE IF NOT EXISTS craig_test2 (
-                            pid             int PRIMARY KEY,
-                            title           varchar(140) NOT NULL,
-                            price           int,
-                            date            varchar(30),
-                            region          varchar(30),
-                            link            varchar(150),
-                            zip_code        varchar(15),
-                            dist_from_zip   varchar(20),
-                            num_items       varchar(10)) '''
+        insert_script = '''insert into craigs_loot (pid, title, price, date, region, link, zip_code, dist_from_zip, num_items)
+                           values (%f,%s,%i,%s,%s,%s,%s,%s,%s) '''
+        create_script = ''' CREATE TABLE IF NOT EXISTS craig_test2 (
+                        pid             int PRIMARY KEY,
+                        title           varchar(140) NOT NULL,
+                        price           int,
+                        date            varchar(30),
+                        region          varchar(30),
+                        link            varchar(150),
+                        zip_code        varchar(15),
+                        dist_from_zip   varchar(20),
+                        num_items       varchar(10)) '''
+        insert_value = (
+            adapter['pid'],
+            adapter['title'],
+            adapter['price'],
+            adapter['date'],
+            adapter['region'],
+            adapter['link'],
+            adapter['zip_code'],
+            adapter['dist_from_zip'],
+            adapter['num_items']
+        )
+        # self.curr.execute(create_script)
+        # self.curr.execute(create_script)
+        print(insert_value)
+        self.curr.execute(insert_script, insert_value)
+        self.conn.commit()
 
-            insert_value = (
-                adapter['pid'],
-                adapter['title'],
-                adapter['price'],
-                adapter['date'],
-                adapter['region'],
-                adapter['link'],
-                adapter['zip_code'],
-                adapter['dist_from_zip'],
-                adapter['num_items']
-            )
-
-            # self.curr.execute(create_script)
-            # self.curr.execute(create_script)
-            self.curr.execute(insert_script, insert_value)
-            self.conn.commit()
-
-        except BaseException as e:
-            print(e)
         # finally:
         #     if self.conn:
         #         # self.curr.close()
