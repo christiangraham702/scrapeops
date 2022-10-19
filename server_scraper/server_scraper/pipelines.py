@@ -11,6 +11,7 @@ from scrapy.exceptions import DropItem
 import psycopg2
 from server_scraper.secret.info import *
 from server_scraper.funcs import get_price
+import logging
 
 
 class ServerScraperPipeline:
@@ -84,8 +85,9 @@ class SaveToPostgresPipeline(object):
     def process_item(self, item, spider):
         try:
             self.store_db(item)
-        except:
+        except BaseException as e:
             self.conn.rollback()
+            logging.log(logging.WARNING, f"SQL ERROR: {e}")
         return item
 
     def store_db(self, item):
