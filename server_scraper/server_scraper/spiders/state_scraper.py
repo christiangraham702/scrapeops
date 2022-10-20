@@ -1,10 +1,10 @@
 import scrapy
 from server_scraper.items import ListCraigStateItem
-from server_scraper.stuff import helpful_stuff, get_base_url
+from server_scraper.stuff import state_links, get_base_url
 import datetime
 from scrapy.loader import ItemLoader
 from itemloaders.processors import MapCompose, TakeFirst
-from server_scraper.funcs import get_base_url, get_num_listings, get_price, is_listings
+from server_scraper.funcs import get_base_url, get_num_listings, get_state, is_listings
 import logging
 
 
@@ -13,6 +13,7 @@ class StateScraperSpider(scrapy.Spider):
     allowed_domains = ['craigslist.org']
     start_urls = ['http://craigslist.org/']
     today = datetime.datetime.now()
+
 
 #    filename = f'craigslist_state_raid_{today.strftime("%m-%d-%Y_%H:%M")}'
 
@@ -23,10 +24,11 @@ class StateScraperSpider(scrapy.Spider):
 #    }
 
     def parse(self, response):
+        self.query = f'/search/sss?query={self.search}'
         self.logger.info('Parse function called on %s', response.url)
-        query = f'/search/sss?query={self.search}'
-        for link in helpful_stuff[self.state]:
-            yield scrapy.Request(link+query, callback=self.parse_listings)
+        for state in state_links:
+            for link in state_links[state]:
+                yield scrapy.Request(link+self.query, callback=self.parse_listings)
 
     def parse_listings(self, response):
         # checks for listings
@@ -62,7 +64,8 @@ class StateScraperSpider(scrapy.Spider):
                     l.add_xpath(
                         'price', f'//li[@data-pid="{pid}"]//span[@class="result-price"]/text()')
 #                    l.replace_value('price', proc(l.get_output_value('price')))
-                    l.add_value('state', self.state)
+                    l.add_value('state', get_state(
+                        response.url, len(self.query)))
                     counter += 1
                     yield l.load_item()
             # checking if need to go to next page

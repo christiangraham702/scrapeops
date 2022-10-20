@@ -96,8 +96,8 @@ class SaveToPostgresPipeline(object):
         #     insert_stat = “INSERT INTO measurement(Station, Date, Level, MeanDischarge, Discharge)
         #     VALUES (?, ?, ?, ?, ?)”, (value1, value2, value3, value4, value5)
 
-        insert_script = '''INSERT INTO craigs_looter (pid, title, price, date, region, link, zip_code, dist_from_zip, num_items)
-                           VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s) '''
+        insert_script = '''INSERT INTO craig_data (pid, title, price, date, region, link, zip_code, dist_from_zip, num_items, state)
+                           VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) '''
         create_script = ''' CREATE TABLE IF NOT EXISTS craig_test2 (
                         pid             BIGINT PRIMARY KEY,
                         title           varchar(140) NOT NULL,
@@ -135,7 +135,8 @@ class SaveToPostgresPipeline(object):
             adapter['link'],
             adapter['zip_code'],
             adapter['dist_from_zip'],
-            adapter['num_items']
+            adapter['num_items'],
+            adapter['state']
         )
 
         self.curr.execute(insert_script, insert_value)
