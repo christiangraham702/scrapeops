@@ -13,8 +13,9 @@ SCRAPEOPS_FAKE_USER_AGENT_ENABLED = True
 
 DOWNLOADER_MIDDLEWARES = {
     'scrapeops_scrapy.middleware.retry.RetryMiddleware': 550,
-    'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
+    'scrapy.downloadermiddlewares.retry.RetryMiddleware': 399,
     'server_scraper.middlewares.ScrapeOpsFakeUserAgentMiddleware': 400,
+    'ScrapeOpsFakeBrowserHeadersMiddleware': 401
 }
 
 EXTENSIONS = {
