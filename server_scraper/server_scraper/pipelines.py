@@ -43,7 +43,7 @@ class DupePipeline:
         adapter = ItemAdapter(item)
 
         if adapter['pid'] in self.names_seen:
-            raise DropItem('Duplicate item found at ')
+            raise DropItem(f"Duplicate item found: {item!r}")
         else:
             self.names_seen.add(adapter['pid'])
             return item
@@ -70,6 +70,7 @@ class CheckNonePipeline:
 
 
 class SaveToPostgresPipeline(object):
+
     def __init__(self):
         self.create_connection()
 
@@ -110,7 +111,7 @@ class SaveToPostgresPipeline(object):
                         num_items       varchar(10)) '''
 
         # checking current pid
-        select_script = f"SELECT date FROM craigs_looter WHERE pid={adapter['pid']}"
+        select_script = f"SELECT date FROM craig_data WHERE pid={adapter['pid']}"
 
         self.curr.execute(select_script)
         check = self.curr.fetchall()
