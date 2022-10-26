@@ -97,13 +97,13 @@ class SaveToPostgresPipeline(object):
         #     insert_stat = “INSERT INTO measurement(Station, Date, Level, MeanDischarge, Discharge)
         #     VALUES (?, ?, ?, ?, ?)”, (value1, value2, value3, value4, value5)
 
-        insert_script = '''INSERT INTO craig_data (pid, title, price, date, region, link, zip_code, dist_from_zip, num_items, state)
+        insert_script = '''INSERT INTO baby_formula (pid, title, price, date, region, link, zip_code, dist_from_zip, num_items, state)
                            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) '''
-        create_script = ''' CREATE TABLE IF NOT EXISTS craig_test2 (
+        create_script = ''' CREATE TABLE IF NOT EXISTS baby_formula (
                         pid             BIGINT PRIMARY KEY,
                         title           varchar(140) NOT NULL,
                         price           int,
-                        date            varchar(30),
+                        date            json,
                         region          varchar(30),
                         link            varchar(150),
                         zip_code        varchar(15),
