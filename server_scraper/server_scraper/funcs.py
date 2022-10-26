@@ -1,3 +1,6 @@
+from server_scraper.stuff import state_links
+
+
 def get_base_url(url):
     key = '/'
     l = 0
@@ -27,3 +30,13 @@ def is_listings(response):
         return True
     else:
         return False
+
+
+def get_state(link, query_length):
+    link = link[:-abs(query_length)]
+    w = ''
+    for state in state_links:
+        for l in state_links[state]:
+            if link == l:
+                w = state
+    return w

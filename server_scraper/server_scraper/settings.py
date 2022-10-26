@@ -13,8 +13,9 @@ SCRAPEOPS_FAKE_USER_AGENT_ENABLED = True
 
 DOWNLOADER_MIDDLEWARES = {
     'scrapeops_scrapy.middleware.retry.RetryMiddleware': 550,
-    'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
+    'scrapy.downloadermiddlewares.retry.RetryMiddleware': 399,
     'server_scraper.middlewares.ScrapeOpsFakeUserAgentMiddleware': 400,
+    'server_scraper.middlewares.ScrapeOpsFakeBrowserHeadersMiddleware': 401
 }
 
 EXTENSIONS = {
@@ -39,7 +40,7 @@ ROBOTSTXT_OBEY = False
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 3
+DOWNLOAD_DELAY = 5
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16

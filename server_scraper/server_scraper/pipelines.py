@@ -12,6 +12,7 @@ import psycopg2
 from server_scraper.secret.info import *
 from server_scraper.funcs import get_price
 import logging
+import json
 
 
 class ServerScraperPipeline:
@@ -42,7 +43,7 @@ class DupePipeline:
         adapter = ItemAdapter(item)
 
         if adapter['pid'] in self.names_seen:
-            raise DropItem('Duplicate item found at ')
+            raise DropItem(f"Duplicate item found: {item!r}")
         else:
             self.names_seen.add(adapter['pid'])
             return item
@@ -69,6 +70,7 @@ class CheckNonePipeline:
 
 
 class SaveToPostgresPipeline(object):
+
     def __init__(self):
         self.create_connection()
 
@@ -91,35 +93,53 @@ class SaveToPostgresPipeline(object):
         return item
 
     def store_db(self, item):
+        adapter = ItemAdapter(item)
         #     insert_stat = “INSERT INTO measurement(Station, Date, Level, MeanDischarge, Discharge)
         #     VALUES (?, ?, ?, ?, ?)”, (value1, value2, value3, value4, value5)
 
-        insert_script = '''INSERT INTO craigs_loot (pid, title, price, date, region, link, zip_code, dist_from_zip, num_items)
-                           VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s) '''
-        create_script = ''' CREATE TABLE IF NOT EXISTS craig_test2 (
-                        pid             int PRIMARY KEY,
+        insert_script = '''INSERT INTO baby_formula (pid, title, price, date, region, link, zip_code, dist_from_zip, num_items, state)
+                           VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) '''
+        create_script = ''' CREATE TABLE IF NOT EXISTS baby_formula (
+                        pid             BIGINT PRIMARY KEY,
                         title           varchar(140) NOT NULL,
                         price           int,
-                        date            varchar(30),
+                        date            json,
                         region          varchar(30),
                         link            varchar(150),
                         zip_code        varchar(15),
                         dist_from_zip   varchar(20),
                         num_items       varchar(10)) '''
+
+        # checking current pid
+        select_script = f"SELECT date FROM craig_data WHERE pid={adapter['pid']}"
+
+        self.curr.execute(select_script)
+        check = self.curr.fetchall()
+        # if pid already in db
+        if check:
+            dates = check[0][0]
+            # if date in db != date scraped... item has been updated
+            if adapter['date'] not in dates:
+                dates.append(adapter['date'])
+                logging.log(
+                    logging.WARNING, f"NEW DATE FOUND: updated to {adapter['date']}")
+            adapter['date'] = json.dumps(dates)
+        else:
+            adapter['date'] = json.dumps([adapter['date']])
+
         insert_value = (
-            item['pid'],
-            item['title'],
-            item['price'],
-            item['date'],
-            item['region'],
-            item['link'],
-            item['zip_code'],
-            item['dist_from_zip'],
-            item['num_items']
+            adapter['pid'],
+            adapter['title'],
+            adapter['price'],
+            adapter['date'],
+            adapter['region'],
+            adapter['link'],
+            adapter['zip_code'],
+            adapter['dist_from_zip'],
+            adapter['num_items'],
+            adapter['state']
         )
-        # self.curr.execute(create_script)
-        # self.curr.execute(create_script)
-        print(insert_value)
+
         self.curr.execute(insert_script, insert_value)
         self.conn.commit()
         return item
