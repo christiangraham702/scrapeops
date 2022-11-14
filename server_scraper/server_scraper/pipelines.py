@@ -20,6 +20,7 @@ class ServerScraperPipeline:
         return item
 
 
+# cleans price and converts to int
 class PriceToFloatPipeLine:
 
     def process_item(self, item, spider):
@@ -35,6 +36,7 @@ class PriceToFloatPipeLine:
             return item
 
 
+# checks for duplicates
 class DupePipeline:
     def __init__(self):
         self.names_seen = set()
@@ -49,6 +51,7 @@ class DupePipeline:
             return item
 
 
+# checks for null values
 class CheckNonePipeline:
     def process_item(self, item, spider):
         adapter = ItemAdapter(item)
@@ -69,11 +72,14 @@ class CheckNonePipeline:
         return item
 
 
+# saves to psotgres db
 class SaveToPostgresPipeline(object):
 
+    # connect to db when spider starts
     def __init__(self):
         self.create_connection()
 
+    # connection function
     def create_connection(self):
         self.conn = psycopg2.connect(
             host=hostname,
@@ -84,6 +90,7 @@ class SaveToPostgresPipeline(object):
         )
         self.curr = self.conn.cursor()
 
+    # save item to db
     def process_item(self, item, spider):
         try:
             self.store_db(item)
@@ -92,6 +99,7 @@ class SaveToPostgresPipeline(object):
             logging.log(logging.WARNING, f"SQL ERROR: {e}")
         return item
 
+    # db interaction
     def store_db(self, item):
         adapter = ItemAdapter(item)
         #     insert_stat = “INSERT INTO measurement(Station, Date, Level, MeanDischarge, Discharge)
