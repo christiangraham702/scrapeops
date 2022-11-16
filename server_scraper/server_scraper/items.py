@@ -48,3 +48,12 @@ class ListCraigStateItem(scrapy.Item):
     dist_from_zip = scrapy.Field(output_processor=TakeFirst())
     num_items = scrapy.Field(output_processor=TakeFirst())
     state = scrapy.Field(output_processor=TakeFirst())
+
+
+class OfferUpItem(scrapy.item):
+    description = scrapy.Field()
+    price = scrapy.Field()
+    city = scrapy.Field()
+    link = scrapy.Field()
+    data_string = scrapy.Field()
+    state = scrapy.Field()
