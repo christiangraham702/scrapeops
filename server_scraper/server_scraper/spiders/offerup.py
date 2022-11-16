@@ -1,6 +1,6 @@
 import scrapy
 from scrapy_playwright.page import PageMethod
-from pw_hope.items import PwHopeItem
+from server_scraper.items import OfferUpItem
 from scrapy.selector import Selector
 from itertools import zip_longest
 

@@ -50,7 +50,7 @@ class ListCraigStateItem(scrapy.Item):
     state = scrapy.Field(output_processor=TakeFirst())
 
 
-class OfferUpItem(scrapy.item):
+class OfferUpItem(scrapy.Item):
     description = scrapy.Field()
     price = scrapy.Field()
     city = scrapy.Field()
