@@ -6,6 +6,8 @@ from scrapy.loader import ItemLoader
 from itemloaders.processors import MapCompose
 from server_scraper.funcs import get_base_url, get_num_listings, get_state, is_listings
 
+# MAIN SPIDER, RUNS THROUGH ALL STATES
+
 
 class StateScraperSpider(scrapy.Spider):
     name = 'state_scraper'
@@ -13,12 +15,15 @@ class StateScraperSpider(scrapy.Spider):
     start_urls = ['http://craigslist.org/']
     today = datetime.datetime.now()
 
+    # go to each craigslist page
     def parse(self, response):
         self.query = f'/search/sss?query={self.search}'
         self.logger.info('Parse function called on %s', response.url)
         for state in state_links:
             for link in state_links[state]:
                 yield scrapy.Request(link+self.query, callback=self.parse_listings)
+
+    # parse each page for listings
 
     def parse_listings(self, response):
         # checks for listings
