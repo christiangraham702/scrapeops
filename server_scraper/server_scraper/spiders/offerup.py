@@ -48,7 +48,7 @@ class OfferupSpider(scrapy.Spider):
         data = list(zip_longest(item_info, link))
         for sel in data:
             test_item = PwHopeItem()
-            test_item['name'] = sel
+            test_item['data_string'] = sel
             test_item['link'] = 'https://offerup.com' + sel[1]
             yield test_item
 
